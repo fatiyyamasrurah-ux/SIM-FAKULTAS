@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIM Peminjaman Fasilitas – Ilmu Pendidikan</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a4fa0;
+    --primary-dark: #0f3278;
+    --primary-light: #e8effe;
+    --accent: #f0a500;
+    --accent-light: #fff8e6;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --bg: #f1f5fb;
+    --white: #ffffff;
+    --sidebar-w: 260px;
+    --shadow: 0 4px 24px rgba(26,79,160,0.10);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== LOGIN PAGE ===== */
+  #loginPage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f3278 0%, #1a4fa0 40%, #2563eb 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  #loginPage::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    top: -200px; right: -200px;
+  }
+  #loginPage::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    bottom: -150px; left: -100px;
+  }
+
+  .login-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 44px 40px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+    position: relative;
+    z-index: 1;
+  }
+  .login-logo {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .login-logo .logo-icon {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, #1a4fa0, #2563eb);
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 20px rgba(26,79,160,0.3);
+  }
+  .login-logo .logo-icon svg { width: 34px; height: 34px; color: white; }
+  .login-logo h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    line-height: 1.2;
+  }
+  .login-logo p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .form-group label span { color: var(--danger); margin-left: 2px; }
+
+  .form-control, .form-select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--white);
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(26,79,160,0.12);
+  }
+  .form-select { cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  .password-wrap { position: relative; }
+  .password-wrap .form-control { padding-right: 44px; }
+  .pwd-toggle {
+    position: absolute;
+    right: 13px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none;
+    cursor: pointer; color: var(--text-muted);
+    display: flex; align-items: center;
+    transition: color .2s;
+  }
+  .pwd-toggle:hover { color: var(--primary); }
+  .pwd-toggle svg { width: 18px; height: 18px; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    padding: 11px 20px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .btn-primary {
+    background: linear-gradient(135deg, #1a4fa0, #2563eb);
+    color: white;
+    box-shadow: 0 4px 14px rgba(26,79,160,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(26,79,160,0.4); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-block { width: 100%; }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #15803d; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-danger:hover { background: #b91c1c; }
+  .btn-warning { background: var(--warning); color: white; }
+  .btn-warning:hover { background: #b45309; }
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--text-muted);
+  }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+  .btn-sm { padding: 7px 13px; font-size: 12.5px; border-radius: 8px; }
+  .btn-icon { padding: 8px; border-radius: 8px; }
+
+  .login-error {
+    background: var(--danger-light);
+    color: var(--danger);
+    border-radius: 9px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 14px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+  }
+  .login-error.show { display: flex; }
+
+  /* ===== MAIN APP ===== */
+  #app { display: none; }
+  #app.active { display: flex; }
+
+  /* Sidebar overlay */
+  .overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 99;
+    backdrop-filter: blur(2px);
+  }
+  .overlay.show { display: block; }
+
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--white);
+    box-shadow: 4px 0 30px rgba(0,0,0,0.12);
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-header {
+    padding: 24px 20px 18px;
+    background: linear-gradient(135deg, #0f3278, #1a4fa0);
+    color: white;
+    flex-shrink: 0;
+  }
+  .sidebar-header .app-name {
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+  .sidebar-header .app-sub {
+    font-size: 11px;
+    opacity: 0.75;
+    margin-top: 2px;
+  }
+  .sidebar-user {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 9px 12px;
+  }
+  .sidebar-user .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .sidebar-user .uname { font-size: 13px; font-weight: 600; }
+  .sidebar-user .urole { font-size: 11px; opacity: 0.7; }
+
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 12px;
+  }
+  .nav-section-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 8px 10px 6px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all .15s;
+    margin-bottom: 2px;
+  }
+  .nav-item svg { width: 18px; height: 18px; color: var(--text-muted); flex-shrink: 0; }
+  .nav-item:hover { background: var(--primary-light); color: var(--primary); }
+  .nav-item:hover svg { color: var(--primary); }
+  .nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+  .nav-item.active svg { color: var(--primary); }
+  .nav-item.logout { color: var(--danger); }
+  .nav-item.logout svg { color: var(--danger); }
+  .nav-item.logout:hover { background: var(--danger-light); }
+
+  .sidebar-footer {
+    padding: 14px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  /* Main content */
+  .main-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  /* Top bar */
+  .topbar {
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    padding: 0 24px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  .menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 9px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s;
+    flex-shrink: 0;
+  }
+  .menu-btn:hover { background: var(--bg); }
+  .menu-btn svg { width: 22px; height: 22px; }
+
+  .topbar-title {
+    flex: 1;
+  }
+  .topbar-title h2 { font-size: 16px; font-weight: 700; }
+  .topbar-title p { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .topbar-badge {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  /* Page content */
+  .page-content {
+    flex: 1;
+    padding: 24px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Pages */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .card-header h3 { font-size: 15px; font-weight: 700; }
+  .card-body { padding: 22px; }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .stat-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .stat-icon {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .stat-icon svg { width: 22px; height: 22px; }
+  .stat-icon.blue { background: var(--primary-light); color: var(--primary); }
+  .stat-icon.green { background: var(--success-light); color: var(--success); }
+  .stat-icon.yellow { background: var(--warning-light); color: var(--warning); }
+  .stat-icon.red { background: var(--danger-light); color: var(--danger); }
+  .stat-info .val { font-size: 26px; font-weight: 800; color: var(--text); }
+  .stat-info .lbl { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Form grid */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .form-grid .full { grid-column: 1/-1; }
+  @media(max-width:600px) { .form-grid { grid-template-columns: 1fr; } }
+
+  textarea.form-control { resize: vertical; min-height: 80px; }
+
+  /* Facilities checklist */
+  .facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    padding: 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .facility-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 11px;
+    background: var(--white);
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all .15s;
+    font-size: 13px;
+  }
+  .facility-item:hover { border-color: var(--primary); background: var(--primary-light); }
+  .facility-item.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); font-weight: 600; }
+  .facility-item input[type=checkbox] { accent-color: var(--primary); width: 15px; height: 15px; flex-shrink:0; cursor:pointer; }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: #f8fafc; }
+  thead th {
+    padding: 11px 14px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    border-bottom: 2px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid #f1f5f9; transition: background .12s; }
+  tbody tr:hover { background: #f8fafc; }
+  tbody td { padding: 12px 14px; vertical-align: middle; }
+  .td-actions { display: flex; gap: 6px; align-items: center; }
+
+  /* Badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-dipinjam { background: var(--warning-light); color: var(--warning); }
+  .badge-selesai { background: var(--success-light); color: var(--success); }
+  .badge-dibatalkan { background: var(--danger-light); color: var(--danger); }
+  .badge::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state svg { width: 52px; height: 52px; margin-bottom: 14px; opacity: .4; }
+  .empty-state h4 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+  .empty-state p { font-size: 13px; }
+
+  /* Search bar */
+  .search-bar {
+    position: relative;
+    max-width: 320px;
+  }
+  .search-bar svg {
+    position: absolute;
+    left: 11px; top: 50%;
+    transform: translateY(-50%);
+    width: 15px; height: 15px;
+    color: var(--text-muted);
+  }
+  .search-bar input {
+    padding-left: 34px;
+    font-size: 13px;
+    height: 38px;
+    border-radius: 9px;
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(3px);
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+    animation: modalIn .25s ease;
+  }
+  @keyframes modalIn { from { opacity:0; transform:scale(.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+  .modal-header {
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-header h3 { font-size: 16px; font-weight: 700; }
+  .modal-close {
+    background: var(--bg);
+    border: none;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    transition: all .15s;
+  }
+  .modal-close:hover { background: var(--danger-light); color: var(--danger); }
+  .modal-body { padding: 22px; }
+  .modal-footer {
+    padding: 16px 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  /* Toast */
+  .toast-container {
+    position: fixed;
+    top: 20px; right: 20px;
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .toast {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 13px 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    min-width: 260px;
+    border-left: 4px solid var(--success);
+    animation: toastIn .3s ease;
+  }
+  .toast.error { border-left-color: var(--danger); }
+  .toast.warning { border-left-color: var(--warning); }
+  .toast svg { width: 18px; height: 18px; flex-shrink: 0; }
+  @keyframes toastIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+
+  /* Welcome banner */
+  .welcome-banner {
+    background: linear-gradient(135deg, #0f3278, #1a4fa0 60%, #2563eb);
+    border-radius: 16px;
+    padding: 24px 28px;
+    color: white;
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .welcome-banner::after {
+    content: '';
+    position: absolute;
+    right: -30px; top: -30px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+  }
+  .welcome-banner h2 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+  .welcome-banner p { font-size: 13px; opacity: .8; max-width: 480px; line-height: 1.5; }
+  .welcome-banner .date-info {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    opacity: .75;
+  }
+  .welcome-banner .date-info svg { width: 14px; height: 14px; }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 18px 0; }
+
+  /* Section title */
+  .section-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .section-title svg { width: 20px; height: 20px; color: var(--primary); }
+
+  /* Number input */
+  .qty-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .qty-ctrl button {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    transition: all .15s;
+  }
+  .qty-ctrl button:hover { border-color: var(--primary); color: var(--primary); }
+  .qty-ctrl .qty-val {
+    min-width: 36px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  /* Tag chips */
+  .chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .chip .chip-del {
+    cursor: pointer;
+    width: 14px; height: 14px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: rgba(26,79,160,0.15);
+    font-size: 10px;
+    line-height: 1;
+  }
+  .chip .chip-del:hover { background: var(--danger); color: white; }
+
+  /* Confirm modal */
+  .confirm-modal .modal { max-width: 380px; }
+  .confirm-icon {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: var(--danger-light);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .confirm-icon svg { width: 28px; height: 28px; color: var(--danger); }
+
+  /* Responsive */
+  @media(max-width:768px) {
+    .page-content { padding: 16px; }
+    .card-body { padding: 16px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .topbar { padding: 0 16px; }
+    .topbar-badge { display: none; }
+  }
+  @media(max-width:480px) {
+    .stats-grid { grid-template-columns: 1fr; }
+  }
+
+  /* No data row */
+  .no-data-row td { text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="loginPage">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M12 10v11M16 10v11"/>
+        </svg>
+      </div>
+      <h1>SIM Peminjaman Fasilitas</h1>
+      <p>Fakultas Ilmu Pendidikan</p>
+    </div>
+
+    <div class="login-error" id="loginError">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <span id="loginErrMsg">Username atau password salah.</span>
+    </div>
+
+    <div class="form-group">
+      <label>Username <span>*</span></label>
+      <select class="form-select" id="loginUsername">
+        <option value="">— Pilih Username —</option>
+        <option value="Fatiyya">Fatiyya</option>
+        <option value="Athirah">Athirah</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Password <span>*</span></label>
+      <div class="password-wrap">
+        <input type="password" class="form-control" id="loginPassword" placeholder="Masukkan password">
+        <button type="button" class="pwd-toggle" onclick="togglePwd()">
+          <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-block" style="margin-top:8px" onclick="doLogin()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Masuk
+    </button>
+  </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="app">
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="app-name">SIM Peminjaman Fasilitas</div>
+      <div class="app-sub">Fakultas Ilmu Pendidikan</div>
+      <div class="sidebar-user">
+        <div class="avatar" id="sidebarAvatar">F</div>
+        <div>
+          <div class="uname" id="sidebarUname">Fatiyya</div>
+          <div class="urole">Administrator</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Menu Utama</div>
+      <div class="nav-item active" onclick="navigateTo('beranda')" id="nav-beranda">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Beranda
+      </div>
+      <div class="nav-item" onclick="navigateTo('input')" id="nav-input">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        Input Peminjaman
+      </div>
+      <div class="nav-item" onclick="navigateTo('data')" id="nav-data">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Data Peminjaman
+      </div>
+      <div class="nav-item" onclick="navigateTo('riwayat')" id="nav-riwayat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Riwayat Peminjaman
+      </div>
+      <div class="nav-section-label" style="margin-top:8px">Fasilitas</div>
+      <div class="nav-item" onclick="navigateTo('fasilitas')" id="nav-fasilitas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8L4 7h16l-4-4z"/></svg>
+        Daftar Fasilitas
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="nav-item logout" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrap">
+    <div class="topbar">
+      <button class="menu-btn" onclick="toggleSidebar()" title="Menu">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>
+        </svg>
+      </button>
+      <div class="topbar-title">
+        <h2 id="pageTitle">Beranda</h2>
+        <p id="pageSubtitle">Selamat datang di sistem</p>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-badge" id="topbarDate"></span>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ===== BERANDA ===== -->
+      <div class="page active" id="page-beranda">
+        <div class="welcome-banner">
+          <h2>Selamat Datang, <span id="welcomeName">Admin</span>! 👋</h2>
+          <p>Sistem Informasi Manajemen Peminjaman dan Pengembalian Ruang serta Fasilitas Fakultas Ilmu Pendidikan berbasis Web.</p>
+          <div class="date-info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="bannerDate">–</span>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>📋 Peminjaman Terbaru</h3>
+            <button class="btn btn-sm btn-primary" onclick="navigateTo('data')">Lihat Semua</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama Peminjam</th>
+                  <th>Fasilitas</th>
+                  <th>Tgl Penggunaan</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="recentTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== INPUT PEMINJAMAN ===== -->
+      <div class="page" id="page-input">
+        <div class="card">
+          <div class="card-header">
+            <h3>📝 Form Input Peminjaman Fasilitas</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Nama Peminjam <span>*</span></label>
+                <input type="text" class="form-control" id="f_nama" placeholder="Nama lengkap peminjam">
+              </div>
+              <div class="form-group">
+                <label>NIM / NIP <span>*</span></label>
+                <input type="text" class="form-control" id="f_nim" placeholder="Nomor induk">
+              </div>
+              <div class="form-group">
+                <label>Jabatan / Status</label>
+                <select class="form-select" id="f_jabatan">
+                  <option value="Mahasiswa">Mahasiswa</option>
+                  <option value="Dosen">Dosen</option>
+                  <option value="Organisasi/UKM">Organisasi / UKM</option>
+                  <option value="Staff">Staff / Tenaga Kependidikan</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>No. Telepon</label>
+                <input type="text" class="form-control" id="f_telp" placeholder="Opsional">
+              </div>
+              <div class="form-group full">
+                <label>Fasilitas yang Dipinjam <span>*</span></label>
+                <div class="facilities-grid" id="facilitiesGrid"></div>
+                <div class="chip-list" id="selectedChips" style="margin-top:8px"></div>
+              </div>
+              <div class="form-group">
+                <label>Jumlah Fasilitas <span>*</span></label>
+                <div class="qty-ctrl">
+                  <button type="button" onclick="changeQty(-1)">−</button>
+                  <span class="qty-val" id="qtyVal">1</span>
+                  <button type="button" onclick="changeQty(1)">+</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tanggal Pengajuan</label>
+                <input type="date" class="form-control" id="f_tgl_ajuan" readonly>
+              </div>
+              <div class="form-group">
+                <label>Tanggal Penggunaan <span>*</span></label>
+                <input type="date" class="form-control" id="f_tgl_pakai">
+              </div>
+              <div class="form-group full">
+                <label>Waktu Penggunaan <span>*</span></label>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <input type="time" class="form-control" id="f_waktu_mulai" style="flex:1">
+                  <span style="color:var(--text-muted);font-weight:700;font-size:16px">–</span>
+                  <input type="time" class="form-control" id="f_waktu_selesai" style="flex:1">
+                </div>
+                <div style="font-size:11.5px;color:var(--text-muted);margin-top:5px">Contoh: 07:30 – 12:00</div>
+              </div>
+              <div class="form-group full">
+                <label>Keperluan / Keterangan <span>*</span></label>
+                <textarea class="form-control" id="f_keperluan" placeholder="Jelaskan keperluan peminjaman..."></textarea>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px;">
+              <button class="btn btn-outline" onclick="resetForm()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+                Reset
+              </button>
+              <button class="btn btn-primary" onclick="savePeminjaman()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Simpan Data
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DATA PEMINJAMAN ===== -->
+      <div class="page" id="page-data">
+        <div class="card">
+          <div class="card-header">
+            <h3>📊 Data Peminjaman</h3>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <div class="search-bar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" class="form-control" id="searchInput" placeholder="Cari peminjam..." oninput="renderDataTable()">
+              </div>
+              <select class="form-select" id="filterStatus" style="height:38px;width:160px;font-size:13px" onchange="renderDataTable()">
+                <option value="">Semua Status</option>
+                <option value="Dipinjam">Dipinjam</option>
+                <option value="Selesai">Selesai</option>
+                <option value="Dibatalkan">Dibatalkan</option>
+              </select>
+              <button class="btn btn-sm btn-primary" onclick="navigateTo('input')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Tambah
+              </button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nama Peminjam</th>
+                  <th>NIM/NIP</th>
+                  <th>Fasilitas</th>
+                  <th>Jumlah</th>
+                  <th>Tgl Penggunaan</th>
+                  <th>Waktu</th>
+                  <th>Keperluan</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="dataTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== RIWAYAT ===== -->
+      <div class="page" id="page-riwayat">
+        <div class="card">
+          <div class="card-header">
+            <h3>🕒 Riwayat Peminjaman</h3>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <div class="search-bar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" class="form-control" id="riwayatSearch" placeholder="Cari riwayat..." oninput="renderRiwayat()">
+              </div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Tgl Pengajuan</th>
+                  <th>Nama Peminjam</th>
+                  <th>NIM/NIP</th>
+                  <th>Jabatan</th>
+                  <th>Fasilitas</th>
+                  <th>Jumlah</th>
+                  <th>Tgl Penggunaan</th>
+                  <th>Waktu</th>
+                  <th>Keperluan</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="riwayatTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DAFTAR FASILITAS ===== -->
+      <div class="page" id="page-fasilitas">
+        <div class="card">
+          <div class="card-header">
+            <h3>🏛️ Daftar Fasilitas yang Dapat Dipinjam</h3>
+          </div>
+          <div class="card-body">
+            <div id="fasilitasList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </div><!-- /main-wrap -->
+</div><!-- /app -->
+
+<!-- ===== EDIT MODAL ===== -->
+<div class="modal-backdrop" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>✏️ Edit Data Peminjaman</h3>
+      <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit_id">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nama Peminjam <span>*</span></label>
+          <input type="text" class="form-control" id="edit_nama">
+        </div>
+        <div class="form-group">
+          <label>NIM / NIP <span>*</span></label>
+          <input type="text" class="form-control" id="edit_nim">
+        </div>
+        <div class="form-group">
+          <label>Jabatan / Status</label>
+          <select class="form-select" id="edit_jabatan">
+            <option value="Mahasiswa">Mahasiswa</option>
+            <option value="Dosen">Dosen</option>
+            <option value="Organisasi/UKM">Organisasi / UKM</option>
+            <option value="Staff">Staff / Tenaga Kependidikan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>No. Telepon</label>
+          <input type="text" class="form-control" id="edit_telp">
+        </div>
+        <div class="form-group full">
+          <label>Fasilitas yang Dipinjam</label>
+          <div class="facilities-grid" id="editFacilitiesGrid"></div>
+          <div class="chip-list" id="editSelectedChips" style="margin-top:8px"></div>
+        </div>
+        <div class="form-group">
+          <label>Jumlah Fasilitas</label>
+          <div class="qty-ctrl">
+            <button type="button" onclick="changeEditQty(-1)">−</button>
+            <span class="qty-val" id="editQtyVal">1</span>
+            <button type="button" onclick="changeEditQty(1)">+</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tanggal Penggunaan</label>
+          <input type="date" class="form-control" id="edit_tgl_pakai">
+        </div>
+        <div class="form-group full">
+          <label>Waktu Penggunaan</label>
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="time" class="form-control" id="edit_waktu_mulai" style="flex:1">
+            <span style="color:var(--text-muted);font-weight:700;font-size:16px">–</span>
+            <input type="time" class="form-control" id="edit_waktu_selesai" style="flex:1">
+          </div>
+          <div style="font-size:11.5px;color:var(--text-muted);margin-top:5px">Contoh: 07:30 – 12:00</div>
+        </div>
+        <div class="form-group">
+          <label>Status Peminjaman</label>
+          <select class="form-select" id="edit_status">
+            <option value="Dipinjam">Dipinjam</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Dibatalkan">Dibatalkan</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Keperluan / Keterangan</label>
+          <textarea class="form-control" id="edit_keperluan"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('editModal')">Batal</button>
+      <button class="btn btn-primary" onclick="updatePeminjaman()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg>
+        Simpan Perubahan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM DELETE MODAL ===== -->
+<div class="modal-backdrop confirm-modal" id="deleteModal">
+  <div class="modal">
+    <div class="modal-body" style="text-align:center;padding:32px 22px 24px">
+      <div class="confirm-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+      </div>
+      <h3 style="font-size:16px;margin-bottom:8px">Hapus Data Peminjaman?</h3>
+      <p style="font-size:13px;color:var(--text-muted)">Tindakan ini tidak dapat dibatalkan. Data peminjaman akan dihapus secara permanen.</p>
+    </div>
+    <div class="modal-footer" style="justify-content:center">
+      <button class="btn btn-outline" onclick="closeModal('deleteModal')">Batal</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Ya, Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ===== DATA & STATE =====
+const USERS = {
+  'Fatiyya': 'fatiyya123',
+  'Athirah': 'athirah123'
+};
+
+const FACILITIES = [
+  { id: 'f1', name: 'Ruang Kelas A', icon: '🏫' },
+  { id: 'f2', name: 'Ruang Kelas B', icon: '🏫' },
+  { id: 'f3', name: 'Ruang Kelas C', icon: '🏫' },
+  { id: 'f4', name: 'Aula Utama', icon: '🏛️' },
+  { id: 'f5', name: 'Laboratorium Komputer', icon: '💻' },
+  { id: 'f6', name: 'Ruang Rapat / Seminar', icon: '🪑' },
+  { id: 'f7', name: 'Proyektor', icon: '📽️' },
+  { id: 'f8', name: 'Laptop', icon: '💻' },
+  { id: 'f9', name: 'Sound System', icon: '🔊' },
+  { id: 'f10', name: 'Microphone', icon: '🎤' },
+  { id: 'f11', name: 'Meja & Kursi Lipat', icon: '🪑' },
+  { id: 'f12', name: 'Kamera / Tripod', icon: '📷' },
+  { id: 'f13', name: 'Screen Proyektor', icon: '📺' },
+  { id: 'f14', name: 'Whiteboard Portabel', icon: '📋' },
+  { id: 'f15', name: 'Ruang Studio', icon: '🎙️' },
+  { id: 'f16', name: 'Tenda / Gazebo', icon: '⛺' },
+];
+
+let currentUser = null;
+const SAMPLE_DATA = [
+  {
+    id: 'P_SAMPLE1', nama: 'Andi Maulana Yusuf', nim: '220403501012',
+    jabatan: 'Mahasiswa', telp: '081234567890',
+    fasilitas: ['Aula Utama', 'Microphone', 'Sound System'],
+    jumlah: 3, tgl_ajuan: '2026-05-12', tgl_pakai: '2026-05-15',
+    waktu_mulai: '08:00', waktu_selesai: '12:00',
+    keperluan: 'Seminar Pendidikan Karakter BEM FAdP',
+    status: 'Selesai', createdAt: '2026-05-12T08:00:00.000Z'
+  },
+  {
+    id: 'P_SAMPLE2', nama: 'Nurul Hikmah Pratiwi', nim: '220403501027',
+    jabatan: 'Mahasiswa', telp: '082198765432',
+    fasilitas: ['Ruang Kelas A', 'Proyektor', 'Screen Proyektor'],
+    jumlah: 3, tgl_ajuan: '2026-05-16', tgl_pakai: '2026-05-17',
+    waktu_mulai: '13:00', waktu_selesai: '16:00',
+    keperluan: 'Rapat koordinasi panitia Pekan Administrasi 2026',
+    status: 'Selesai', createdAt: '2026-05-16T09:00:00.000Z'
+  },
+  {
+    id: 'P_SAMPLE3', nama: 'Dr. Hasrul Bakri, M.Pd', nim: '196805201998031004',
+    jabatan: 'Dosen', telp: '08119988776',
+    fasilitas: ['Ruang Rapat / Seminar', 'Laptop', 'Proyektor'],
+    jumlah: 3, tgl_ajuan: '2026-05-17', tgl_pakai: '2026-05-19',
+    waktu_mulai: '09:00', waktu_selesai: '11:30',
+    keperluan: 'Rapat Tim Kurikulum Program Studi Ilmu Pendidikan',
+    status: 'Dipinjam', createdAt: '2026-05-17T07:30:00.000Z'
+  },
+  {
+    id: 'P_SAMPLE4', nama: 'Himpunan Mahasiswa AdPen', nim: 'ORG-HMADP-2026',
+    jabatan: 'Organisasi/UKM', telp: '085344332211',
+    fasilitas: ['Aula Utama', 'Sound System', 'Microphone', 'Meja & Kursi Lipat'],
+    jumlah: 4, tgl_ajuan: '2026-05-18', tgl_pakai: '2026-05-22',
+    waktu_mulai: '07:30', waktu_selesai: '17:00',
+    keperluan: 'Pelantikan Pengurus Baru HIMA AdPen Periode 2026/2027',
+    status: 'Dipinjam', createdAt: '2026-05-18T08:00:00.000Z'
+  },
+];
+
+let stored = localStorage.getItem('sim_peminjaman');
+let data;
+if (!stored) {
+  data = [...SAMPLE_DATA];
+  localStorage.setItem('sim_peminjaman', JSON.stringify(data));
+} else {
+  data = JSON.parse(stored);
+}
+let selectedFacilities = [];
+let editSelectedFacilities = [];
+let editQty = 1;
+let qty = 1;
+let deleteTargetId = null;
+let currentPage = 'beranda';
+
+// ===== HELPERS =====
+function save() {
+  localStorage.setItem('sim_peminjaman', JSON.stringify(data));
+}
+function genId() {
+  return 'P' + Date.now().toString(36).toUpperCase();
+}
+function formatDate(d) {
+  if (!d) return '–';
+  const parts = d.split('-');
+  return parts[2] + '/' + parts[1] + '/' + parts[0];
+}
+function todayStr() {
+  return new Date().toISOString().split('T')[0];
+}
+function dateLabel() {
+  const now = new Date();
+  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  return `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+// ===== PASSWORD TOGGLE =====
+function togglePwd() {
+  const inp = document.getElementById('loginPassword');
+  const icon = document.getElementById('eyeIcon');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+  } else {
+    inp.type = 'password';
+    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  }
+}
+
+// ===== LOGIN =====
+function doLogin() {
+  const uname = document.getElementById('loginUsername').value;
+  const pwd = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  const errMsg = document.getElementById('loginErrMsg');
+
+  if (!uname) {
+    errMsg.textContent = 'Silakan pilih username terlebih dahulu.';
+    errEl.classList.add('show'); return;
+  }
+  if (!pwd) {
+    errMsg.textContent = 'Password tidak boleh kosong.';
+    errEl.classList.add('show'); return;
+  }
+  if (USERS[uname] !== pwd) {
+    errMsg.textContent = 'Password salah. Silakan coba lagi.';
+    errEl.classList.add('show'); return;
+  }
+
+  errEl.classList.remove('show');
+  currentUser = uname;
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('app').classList.add('active');
+  document.getElementById('sidebarUname').textContent = uname;
+  document.getElementById('sidebarAvatar').textContent = uname[0].toUpperCase();
+  document.getElementById('welcomeName').textContent = uname;
+  document.getElementById('bannerDate').textContent = dateLabel();
+  document.getElementById('topbarDate').textContent = dateLabel();
+
+  initFacilitiesGrid();
+  initEditFacilitiesGrid();
+  initFacilitasPage();
+  navigateTo('beranda');
+}
+document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function doLogout() {
+  currentUser = null;
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('loginPage').style.display = '';
+  document.getElementById('loginUsername').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').classList.remove('show');
+  closeSidebar();
+}
+
+// ===== SIDEBAR =====
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('overlay');
+  s.classList.toggle('open');
+  o.classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ===== NAVIGATE =====
+const pageTitles = {
+  beranda: ['Beranda', 'Ringkasan aktivitas peminjaman'],
+  input:   ['Input Peminjaman', 'Tambah data peminjaman baru'],
+  data:    ['Data Peminjaman', 'Kelola semua data peminjaman'],
+  riwayat: ['Riwayat Peminjaman', 'Histori seluruh aktivitas'],
+  fasilitas:['Daftar Fasilitas', 'Fasilitas yang dapat dipinjam'],
+};
+
+function navigateTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const nav = document.getElementById('nav-' + page);
+  if (nav) nav.classList.add('active');
+  const t = pageTitles[page] || [page, ''];
+  document.getElementById('pageTitle').textContent = t[0];
+  document.getElementById('pageSubtitle').textContent = t[1];
+  currentPage = page;
+  closeSidebar();
+
+  if (page === 'beranda') renderBeranda();
+  if (page === 'data') renderDataTable();
+  if (page === 'riwayat') renderRiwayat();
+  if (page === 'input') {
+    document.getElementById('f_tgl_ajuan').value = todayStr();
+  }
+}
+
+// ===== FACILITIES GRID =====
+function initFacilitiesGrid() {
+  const grid = document.getElementById('facilitiesGrid');
+  grid.innerHTML = '';
+  FACILITIES.forEach(f => {
+    const el = document.createElement('label');
+    el.className = 'facility-item';
+    el.dataset.id = f.id;
+    el.innerHTML = `<input type="checkbox" value="${f.id}" onchange="toggleFacility('${f.id}','${f.name}')"> ${f.icon} ${f.name}`;
+    grid.appendChild(el);
+  });
+}
+
+function toggleFacility(id, name) {
+  if (selectedFacilities.includes(name)) {
+    selectedFacilities = selectedFacilities.filter(f => f !== name);
+  } else {
+    selectedFacilities.push(name);
+  }
+  renderChips('selectedChips', selectedFacilities, removeFacility);
+  document.querySelectorAll('#facilitiesGrid .facility-item').forEach(el => {
+    const lbl = el.textContent.trim().replace(/^.*?\s/, '');
+    if (selectedFacilities.includes(FACILITIES.find(f=>f.id===el.dataset.id)?.name)) {
+      el.classList.add('selected');
+    } else {
+      el.classList.remove('selected');
+    }
+  });
+}
+
+function removeFacility(name) {
+  selectedFacilities = selectedFacilities.filter(f => f !== name);
+  document.querySelectorAll('#facilitiesGrid .facility-item input').forEach(cb => {
+    const fac = FACILITIES.find(f => f.id === cb.value);
+    if (fac && fac.name === name) { cb.checked = false; cb.closest('.facility-item').classList.remove('selected'); }
+  });
+  renderChips('selectedChips', selectedFacilities, removeFacility);
+}
+
+function renderChips(containerId, list, removeFn) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = list.map(name =>
+    `<div class="chip">${name} <span class="chip-del" onclick="${removeFn.name}('${name.replace(/'/g,"\\'")}')">✕</span></div>`
+  ).join('');
+}
+
+// EDIT facilities
+function initEditFacilitiesGrid() {
+  const grid = document.getElementById('editFacilitiesGrid');
+  grid.innerHTML = '';
+  FACILITIES.forEach(f => {
+    const el = document.createElement('label');
+    el.className = 'facility-item';
+    el.dataset.id = f.id;
+    el.innerHTML = `<input type="checkbox" value="${f.id}" onchange="toggleEditFacility('${f.id}','${f.name}')"> ${f.icon} ${f.name}`;
+    grid.appendChild(el);
+  });
+}
+
+function toggleEditFacility(id, name) {
+  if (editSelectedFacilities.includes(name)) {
+    editSelectedFacilities = editSelectedFacilities.filter(f => f !== name);
+  } else {
+    editSelectedFacilities.push(name);
+  }
+  renderChips('editSelectedChips', editSelectedFacilities, removeEditFacility);
+  syncEditFacilityUI();
+}
+
+function removeEditFacility(name) {
+  editSelectedFacilities = editSelectedFacilities.filter(f => f !== name);
+  syncEditFacilityUI();
+  renderChips('editSelectedChips', editSelectedFacilities, removeEditFacility);
+}
+
+function syncEditFacilityUI() {
+  document.querySelectorAll('#editFacilitiesGrid .facility-item').forEach(el => {
+    const f = FACILITIES.find(f => f.id === el.dataset.id);
+    if (f && editSelectedFacilities.includes(f.name)) {
+      el.classList.add('selected');
+      el.querySelector('input').checked = true;
+    } else {
+      el.classList.remove('selected');
+      el.querySelector('input').checked = false;
+    }
+  });
+}
+
+// ===== QTY =====
+function changeQty(d) {
+  qty = Math.max(1, qty + d);
+  document.getElementById('qtyVal').textContent = qty;
+}
+function changeEditQty(d) {
+  editQty = Math.max(1, editQty + d);
+  document.getElementById('editQtyVal').textContent = editQty;
+}
+
+// ===== SAVE PEMINJAMAN =====
+function savePeminjaman() {
+  const nama = document.getElementById('f_nama').value.trim();
+  const nim = document.getElementById('f_nim').value.trim();
+  const keperluan = document.getElementById('f_keperluan').value.trim();
+  const tgl_pakai = document.getElementById('f_tgl_pakai').value;
+  const waktu_mulai = document.getElementById('f_waktu_mulai').value;
+  const waktu_selesai = document.getElementById('f_waktu_selesai').value;
+
+  if (!nama) { showToast('Nama peminjam wajib diisi!', 'error'); return; }
+  if (!nim) { showToast('NIM/NIP wajib diisi!', 'error'); return; }
+  if (selectedFacilities.length === 0) { showToast('Pilih minimal satu fasilitas!', 'error'); return; }
+  if (!tgl_pakai) { showToast('Tanggal penggunaan wajib diisi!', 'error'); return; }
+  if (!waktu_mulai || !waktu_selesai) { showToast('Waktu mulai dan selesai wajib diisi!', 'error'); return; }
+  if (!keperluan) { showToast('Keperluan/keterangan wajib diisi!', 'error'); return; }
+
+  const record = {
+    id: genId(),
+    nama,
+    nim,
+    jabatan: document.getElementById('f_jabatan').value,
+    telp: document.getElementById('f_telp').value.trim(),
+    fasilitas: [...selectedFacilities],
+    jumlah: qty,
+    tgl_ajuan: todayStr(),
+    tgl_pakai,
+    waktu_mulai,
+    waktu_selesai,
+    keperluan,
+    status: 'Dipinjam',
+    createdAt: new Date().toISOString(),
+  };
+
+  data.unshift(record);
+  save();
+  resetForm();
+  showToast('Data peminjaman berhasil disimpan!');
+  navigateTo('data');
+}
+
+function resetForm() {
+  ['f_nama','f_nim','f_telp','f_keperluan','f_tgl_pakai','f_waktu_mulai','f_waktu_selesai'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  document.getElementById('f_jabatan').value = 'Mahasiswa';
+  document.getElementById('f_tgl_ajuan').value = todayStr();
+  selectedFacilities = [];
+  qty = 1;
+  document.getElementById('qtyVal').textContent = '1';
+  document.getElementById('selectedChips').innerHTML = '';
+  document.querySelectorAll('#facilitiesGrid .facility-item').forEach(el => {
+    el.classList.remove('selected');
+    el.querySelector('input').checked = false;
+  });
+  showToast('Form berhasil direset.', 'warning');
+}
+
+// ===== RENDER BERANDA =====
+function renderBeranda() {
+  const total = data.length;
+  const dipinjam = data.filter(d => d.status === 'Dipinjam').length;
+  const selesai = data.filter(d => d.status === 'Selesai').length;
+  const hari_ini = data.filter(d => d.tgl_pakai === todayStr()).length;
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div class="stat-info"><div class="val">${total}</div><div class="lbl">Total Peminjaman</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="stat-info"><div class="val">${dipinjam}</div><div class="lbl">Sedang Dipinjam</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="stat-info"><div class="val">${selesai}</div><div class="lbl">Selesai Dikembalikan</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="stat-info"><div class="val">${hari_ini}</div><div class="lbl">Peminjaman Hari Ini</div></div>
+    </div>
+  `;
+
+  const recent = data.slice(0, 5);
+  const tbody = document.getElementById('recentTable');
+  if (recent.length === 0) {
+    tbody.innerHTML = '<tr class="no-data-row"><td colspan="4">Belum ada data peminjaman</td></tr>';
+    return;
+  }
+  tbody.innerHTML = recent.map(r => `
+    <tr>
+      <td><strong>${r.nama}</strong><br><span style="font-size:11.5px;color:var(--text-muted)">${r.nim}</span></td>
+      <td>${r.fasilitas.slice(0,2).join(', ')}${r.fasilitas.length>2?` +${r.fasilitas.length-2} lainnya`:''}</td>
+      <td>${formatDate(r.tgl_pakai)}</td>
+      <td>${badgeHtml(r.status)}</td>
+    </tr>
+  `).join('');
+}
+
+// ===== RENDER DATA TABLE =====
+function renderDataTable() {
+  const search = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  const filterSt = document.getElementById('filterStatus')?.value || '';
+
+  let filtered = data.filter(r => {
+    const matchSearch = !search ||
+      r.nama.toLowerCase().includes(search) ||
+      r.nim.toLowerCase().includes(search) ||
+      r.keperluan.toLowerCase().includes(search);
+    const matchStatus = !filterSt || r.status === filterSt;
+    return matchSearch && matchStatus;
+  });
+
+  const tbody = document.getElementById('dataTable');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr class="no-data-row"><td colspan="10">Tidak ada data yang ditemukan</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((r, i) => `
+    <tr>
+      <td style="color:var(--text-muted);font-size:12px">${i+1}</td>
+      <td><strong>${r.nama}</strong><br><span style="font-size:11.5px;color:var(--text-muted)">${r.jabatan || ''}</span></td>
+      <td>${r.nim}</td>
+      <td style="max-width:180px">${r.fasilitas.join(', ')}</td>
+      <td style="text-align:center"><strong>${r.jumlah}</strong></td>
+      <td>${formatDate(r.tgl_pakai)}</td>
+      <td style="white-space:nowrap">${r.waktu_mulai||'–'}${r.waktu_selesai ? ' – '+r.waktu_selesai : ''}</td>
+      <td style="max-width:160px;font-size:12.5px">${r.keperluan}</td>
+      <td>${badgeHtml(r.status)}</td>
+      <td>
+        <div class="td-actions">
+          ${r.status === 'Dipinjam' ? `<button class="btn btn-sm btn-success" onclick="markSelesai('${r.id}')" title="Tandai Selesai">✓</button>` : ''}
+          <button class="btn btn-sm btn-warning" onclick="openEdit('${r.id}')" title="Edit">✏️</button>
+          <button class="btn btn-sm btn-danger" onclick="openDelete('${r.id}')" title="Hapus">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ===== RENDER RIWAYAT =====
+function renderRiwayat() {
+  const search = (document.getElementById('riwayatSearch')?.value || '').toLowerCase();
+  let filtered = data.filter(r =>
+    !search || r.nama.toLowerCase().includes(search) || r.nim.toLowerCase().includes(search) ||
+    r.fasilitas.some(f => f.toLowerCase().includes(search))
+  );
+  const tbody = document.getElementById('riwayatTable');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr class="no-data-row"><td colspan="11">Tidak ada riwayat peminjaman</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map((r,i) => `
+    <tr>
+      <td style="color:var(--text-muted);font-size:12px">${i+1}</td>
+      <td style="white-space:nowrap">${formatDate(r.tgl_ajuan)}</td>
+      <td><strong>${r.nama}</strong></td>
+      <td>${r.nim}</td>
+      <td>${r.jabatan || '–'}</td>
+      <td>${r.fasilitas.join(', ')}</td>
+      <td style="text-align:center">${r.jumlah}</td>
+      <td>${formatDate(r.tgl_pakai)}</td>
+      <td style="white-space:nowrap">${r.waktu_mulai||'–'}${r.waktu_selesai ? ' – '+r.waktu_selesai : ''}</td>
+      <td style="max-width:140px;font-size:12.5px">${r.keperluan}</td>
+      <td>${badgeHtml(r.status)}</td>
+    </tr>
+  `).join('');
+}
+
+// ===== FASILITAS PAGE =====
+function initFacilitasPage() {
+  const list = document.getElementById('fasilitasList');
+  list.innerHTML = FACILITIES.map(f => `
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm)">
+      <span style="font-size:28px;line-height:1">${f.icon}</span>
+      <div>
+        <div style="font-weight:700;font-size:13.5px">${f.name}</div>
+        <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">ID: ${f.id}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== MARK SELESAI =====
+function markSelesai(id) {
+  const idx = data.findIndex(r => r.id === id);
+  if (idx !== -1) {
+    data[idx].status = 'Selesai';
+    data[idx].tgl_kembali = todayStr();
+    save();
+    renderDataTable();
+    showToast('Status diperbarui: Selesai ✅');
+  }
+}
+
+// ===== EDIT =====
+function openEdit(id) {
+  const r = data.find(d => d.id === id);
+  if (!r) return;
+  document.getElementById('edit_id').value = r.id;
+  document.getElementById('edit_nama').value = r.nama;
+  document.getElementById('edit_nim').value = r.nim;
+  document.getElementById('edit_jabatan').value = r.jabatan || 'Mahasiswa';
+  document.getElementById('edit_telp').value = r.telp || '';
+  document.getElementById('edit_tgl_pakai').value = r.tgl_pakai;
+  document.getElementById('edit_waktu_mulai').value = r.waktu_mulai || '';
+  document.getElementById('edit_waktu_selesai').value = r.waktu_selesai || '';
+  document.getElementById('edit_keperluan').value = r.keperluan;
+  document.getElementById('edit_status').value = r.status;
+  editSelectedFacilities = [...(r.fasilitas || [])];
+  editQty = r.jumlah || 1;
+  document.getElementById('editQtyVal').textContent = editQty;
+  syncEditFacilityUI();
+  renderChips('editSelectedChips', editSelectedFacilities, removeEditFacility);
+  document.getElementById('editModal').classList.add('show');
+}
+
+function updatePeminjaman() {
+  const id = document.getElementById('edit_id').value;
+  const idx = data.findIndex(d => d.id === id);
+  if (idx === -1) return;
+
+  const nama = document.getElementById('edit_nama').value.trim();
+  const nim = document.getElementById('edit_nim').value.trim();
+  if (!nama || !nim) { showToast('Nama dan NIM/NIP wajib diisi!', 'error'); return; }
+  if (editSelectedFacilities.length === 0) { showToast('Pilih minimal satu fasilitas!', 'error'); return; }
+
+  data[idx] = {
+    ...data[idx],
+    nama,
+    nim,
+    jabatan: document.getElementById('edit_jabatan').value,
+    telp: document.getElementById('edit_telp').value.trim(),
+    fasilitas: [...editSelectedFacilities],
+    jumlah: editQty,
+    tgl_pakai: document.getElementById('edit_tgl_pakai').value,
+    waktu_mulai: document.getElementById('edit_waktu_mulai').value,
+    waktu_selesai: document.getElementById('edit_waktu_selesai').value,
+    keperluan: document.getElementById('edit_keperluan').value.trim(),
+    status: document.getElementById('edit_status').value,
+    updatedAt: new Date().toISOString(),
+  };
+
+  save();
+  closeModal('editModal');
+  renderDataTable();
+  showToast('Data peminjaman berhasil diperbarui! ✏️');
+}
+
+// ===== DELETE =====
+function openDelete(id) {
+  deleteTargetId = id;
+  document.getElementById('deleteModal').classList.add('show');
+}
+function confirmDelete() {
+  if (!deleteTargetId) return;
+  data = data.filter(d => d.id !== deleteTargetId);
+  save();
+  closeModal('deleteModal');
+  renderDataTable();
+  showToast('Data peminjaman berhasil dihapus.', 'warning');
+  deleteTargetId = null;
+}
+
+// ===== MODALS =====
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+document.querySelectorAll('.modal-backdrop').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+});
+
+// ===== BADGE =====
+function badgeHtml(status) {
+  const cls = status === 'Dipinjam' ? 'badge-dipinjam' : status === 'Selesai' ? 'badge-selesai' : 'badge-dibatalkan';
+  return `<span class="badge ${cls}">${status}</span>`;
+}
+
+// ===== TOAST =====
+function showToast(msg, type = 'success') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast ${type !== 'success' ? type : ''}`;
+  const icons = {
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+    error: '<svg viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>',
+    warning: '<svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  };
+  t.innerHTML = (icons[type] || icons.success) + `<span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(20px)'; t.style.transition = 'all .3s'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// ===== INIT =====
+document.getElementById('f_tgl_ajuan').value = todayStr();
+</script>
+</body>
+</html>
